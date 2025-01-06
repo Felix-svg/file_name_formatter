@@ -180,3 +180,5 @@ cython_debug/
 *.log
 dist/
 venv/
+
+.file_name_formatter/
