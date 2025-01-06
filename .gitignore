@@ -2,6 +2,8 @@
 __pycache__/
 *.py[cod]
 *$py.class
+.pyc 
+.pyo
 
 # C extensions
 *.so
@@ -169,3 +171,12 @@ cython_debug/
 
 # PyPI configuration file
 .pypirc
+
+# Ignore IDE/editor settings
+.vscode/
+.idea/
+
+# Ignore logs and cache
+*.log
+dist/
+venv/
