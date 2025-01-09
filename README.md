@@ -14,7 +14,7 @@ pip install git+https://github.com/Felix-svg/file_name_formatter.git
 ## Usage
 Import the module to your working directory
 ```bash
-from file_name_formatter.convert import Convert
+from file_name_formatter.convert import StringFormatter
 ```
 
 ## License
