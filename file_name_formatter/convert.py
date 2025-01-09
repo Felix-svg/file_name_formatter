@@ -6,111 +6,43 @@
 'desktop/first_file' -> 'First file'
 """
 
-import os
+import re
 
 
-class Convert:
+class StringFormatter:
     def __init__(self):
         pass
 
-    def convert_input(self):
-        clear = lambda: os.system("cls")
+    def format_string(self, input_string: str) -> list:
+        stripped_input: str = input_string.strip()
+        output: list[str] = []
 
-        controls: str = input(
-            "1. Convert from 'first_file' -> 'First file'\n2. Convert from 'first_file' -> 'first file'\n3. Convert from 'first-file' -> 'First file'\n4. Convert from 'firstFile' -> 'First file'\n5. Convert from 'desktop/first_file' -> 'First file'\n"
-        ).strip()
-        clear()
+        if re.match(r"^[a-z]+([A-Z][a-z]*)*$", stripped_input):
+            result_string = ""
 
-        if controls == "1":
-            return remove_underscore_capitalize()
-        elif controls == "2":
-            return remove_underscore_lowercase()
-        elif controls == "3":
-            return remove_hyphen_capitalize()
-        elif controls == "4":
-            return insert_space()
-        elif controls == "5":
-            return remove_computer_directory()
-        else:
-            raise ValueError("Invalid format")
+            for i in range(len(stripped_input)):
+                if stripped_input[i].isupper():
+                    break
 
+            stripped_input: list[str] = [stripped_input[:i], stripped_input[i:]]
+            result_string += " ".join(stripped_input).capitalize()
+            output.append(result_string)
 
-def remove_underscore_capitalize():
-    file_name: str = input("Enter file name: ").strip()
+        elif re.match(r"^[a-zA-Z0-9_]+$", stripped_input):
+            result_string1: str = stripped_input.replace("_", " ").capitalize()
+            result_string2: str = stripped_input.replace("_", " ")
+            output.extend([result_string1, result_string2])
 
-    if file_name == "":
-        raise ValueError("Empty inputs not allowed")
+        elif re.match(r"^[a-zA-Z0-9-]+$", stripped_input):
+            result_string: str = stripped_input.replace("-", " ").capitalize()
+            output.append(result_string)
 
-    if not file_name[len(file_name) - 1].isalnum() or not file_name[0].isalnum():
-        raise ValueError("Invalid input format")
+        elif re.match(r"^([a-zA-Z0-9_]+)/([a-zA-Z0-9_]+)$", stripped_input):
+            parts = stripped_input.split("/")
+            result_string = parts[1].replace("_", " ").capitalize()
+            output.append(result_string)
 
-    result_string: str = file_name.replace("_", " ").capitalize()
-    return result_string
+        if not output:
+            output.append(input_string)
 
-
-def remove_underscore_lowercase():
-    file_name: str = input("Enter file name: ").strip()
-
-    if file_name == "":
-        raise ValueError("Empty inputs not allowed")
-
-    if not file_name[len(file_name) - 1].isalnum() or not file_name[0].isalnum():
-        raise ValueError("Invalid input format")
-
-    result_string: str = file_name.replace("_", " ")
-    return result_string
-
-
-def remove_hyphen_capitalize():
-    file_name: str = input("Enter file name: ").strip()
-
-    if file_name == "":
-        raise ValueError("Empty inputs not allowed")
-
-    if not file_name[len(file_name) - 1].isalnum() or not file_name[0].isalnum():
-        raise ValueError("Invalid input format")
-
-    if "-" not in file_name:
-        raise ValueError("Invalid input format")
-    else:
-        result_string: str = file_name.replace("-", " ").capitalize()
-        return result_string
-
-
-def insert_space():
-    file_name: str = input("Enter file name: ").strip()
-
-    if file_name == "":
-        raise ValueError("Empty inputs not allowed")
-
-    if not file_name[len(file_name) - 1].isalnum() or not file_name[0].isalnum():
-        raise ValueError("Invalid input format")
-
-    i = 0
-
-    for i in range(len(file_name)):
-        if file_name[i].isupper():
-            break
-        i += 1
-
-    split_file_name: list[str] = [file_name[:i], file_name[i:]]
-    return " ".join(split_file_name).capitalize()
-
-
-def remove_computer_directory():
-    file_name: str = input("Enter file name: ").strip()
-
-    if file_name == "":
-        raise ValueError("Empty inputs not allowed")
-
-    i = 0
-
-    for i in range(len(file_name)):
-        if file_name[i] == "/":
-            break
-        i += 1
-
-    new_file_name = [file_name[i + 1 :]]
-
-    result_string = "".join(new_file_name)
-    return result_string.replace("_", " ").capitalize()
+        return output
